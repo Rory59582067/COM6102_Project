@@ -1,78 +1,42 @@
-// server.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
-const jwt = require('jsonwebtoken');
-const app = express();
-const port = 3000;
+const sqlite3 = require('sqlite3').verbose();
+const cors = require('cors');
 
+const app = express();
+const PORT = 3000;
+
+// Middleware
+app.use(cors());
 app.use(bodyParser.json());
 
-const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'movie_db'
+// Database setup
+const db = new sqlite3.Database('./database/movie_db.sql', (err) => {
+    if (err) {
+        console.error('Error opening database:', err.message);
+    } else {
+        console.log('Connected to the SQLite database.');
+    }
 });
 
-db.connect(err => {
-    if (err) throw err;
-    console.log('Connected to database');
-});
-
-app.post('/api/register', (req, res) => {
+// Login endpoint
+app.post('/login', (req, res) => {
     const { username, password } = req.body;
-    db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, password], (err, result) => {
-        if (err) throw err;
-        res.json({ success: true });
-    });
-});
 
-app.post('/api/login', (req, res) => {
-    const { username, password } = req.body;
-    db.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password], (err, result) => {
-        if (err) throw err;
-        if (result.length > 0) {
-            const token = jwt.sign({ username }, 'secretKey');
-            res.json({ success: true, token });
+    const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
+    db.get(query, [username, password], (err, row) => {
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: 'Internal server error' });
+        } else if (row) {
+            res.json({ username: row.username });
         } else {
-            res.json({ success: false });
+            res.status(401).json({ error: 'Invalid username or password' });
         }
     });
 });
 
-app.get('/api/movies', (req, res) => {
-    db.query('SELECT * FROM movies', (err, result) => {
-        if (err) throw err;
-        res.json(result);
-    });
-});
-
-app.post('/api/movies', (req, res) => {
-    const { title, director, year } = req.body;
-    db.query('INSERT INTO movies (title, director, year) VALUES (?, ?, ?)', [title, director, year], (err, result) => {
-        if (err) throw err;
-        res.json({ success: true });
-    });
-});
-
-app.put('/api/movies/:id', (req, res) => {
-    const { title, director, year } = req.body;
-    const id = req.params.id;
-    db.query('UPDATE movies SET title = ?, director = ?, year = ? WHERE id = ?', [title, director, year, id], (err, result) => {
-        if (err) throw err;
-        res.json({ success: true });
-    });
-});
-
-app.delete('/api/movies/:id', (req, res) => {
-    const id = req.params.id;
-    db.query('DELETE FROM movies WHERE id = ?', [id], (err, result) => {
-        if (err) throw err;
-        res.json({ success: true });
-    });
-});
-
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

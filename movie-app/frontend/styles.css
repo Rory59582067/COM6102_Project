@@ -1,26 +1,57 @@
-/* styles.css */
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
 }
 
 header {
+    background-color: #333;
+    color: white;
+    padding: 1rem;
     text-align: center;
-    padding: 20px;
 }
 
 main {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
+    margin: 2rem auto;
+    width: 300px;
+    padding: 1rem;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 form {
-    width: 100%;
-    max-width: 400px;
+    display: flex;
+    flex-direction: column;
 }
 
-@media (max-width: 600px) {
-    form {
-        padding: 10px;
-    }
+label {
+    margin-bottom: 0.5rem;
+}
+
+input {
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 0.5rem;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #555;
+}
+
+#errorMessage {
+    margin-top: 1rem;
+    color: red;
+    font-size: 0.9rem;
 }

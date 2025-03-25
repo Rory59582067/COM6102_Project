@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000" # 将容器的 3000 端口映射到主机的 3000 端口
+    volumes:
+      - ./backend:/app # 挂载后端代码，方便开发时热更新
+    depends_on:
+      - database
+
+  database:
+    image: nouchka/sqlite3 # 使用 SQLite 的 Docker 镜像
+    volumes:
+      - ./database:/data # 挂载数据库文件到容器中

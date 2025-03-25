@@ -1,17 +1,9 @@
--- movie_db.sql
-CREATE DATABASE movie_db;
-
-USE movie_db;
-
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) NOT NULL,
-    password VARCHAR(50) NOT NULL
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT NOT NULL UNIQUE,
+    password TEXT NOT NULL
 );
 
-CREATE TABLE movies (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    director VARCHAR(100) NOT NULL,
-    year INT NOT NULL
-);
+-- Insert sample data
+INSERT INTO users (username, password) VALUES ('admin', 'password123');
+INSERT INTO users (username, password) VALUES ('user1', 'mypassword');

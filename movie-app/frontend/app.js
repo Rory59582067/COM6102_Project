@@ -1,22 +1,26 @@
-// app.js
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+document.getElementById('loginForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); // 阻止默认提交行为
+
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    // Call backend API to authenticate user
-    fetch('/api/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert('Login successful!');
+
+    try {
+        const response = await fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            alert('Login successful! Welcome, ' + data.username);
         } else {
-            alert('Login failed. Please try again.');
+            document.getElementById('errorMessage').style.display = 'block';
         }
-    });
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred. Please try again later.');
+    }
 });

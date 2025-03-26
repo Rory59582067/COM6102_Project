@@ -7,9 +7,17 @@ const app = express();
 const PORT = 3000;
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
 
+// 配置 CORS
+app.use(cors({
+    origin: 'http://127.0.0.1:5500', // 允许的前端地址
+    methods: ['GET', 'POST', 'OPTIONS'], // 允许的请求方法
+    allowedHeaders: ['Content-Type'], // 允许的请求头
+}));
+app.use(bodyParser.json());
+app.options('/login', (req, res) => {
+    res.sendStatus(200); // 响应预检请求
+});
 // Database setup
 const db = new sqlite3.Database('./database/movie_db.sql', (err) => {
     if (err) {
@@ -26,7 +34,7 @@ app.post('/login', (req, res) => {
     const query = 'SELECT * FROM users WHERE username = ? AND password = ?';
     db.get(query, [username, password], (err, row) => {
         if (err) {
-            console.error(err.message);
+            console.error('Database error:', err.message);
             res.status(500).json({ error: 'Internal server error' });
         } else if (row) {
             res.json({ username: row.username });

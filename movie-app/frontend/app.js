@@ -12,11 +12,14 @@ document.getElementById('loginForm').addEventListener('submit', async function (
             },
             body: JSON.stringify({ username, password }),
         });
-
+    
+        console.log('Response:', response);
         if (response.ok) {
             const data = await response.json();
-            alert('Login successful! Welcome, ' + data.username);
+            console.log('Login successful:', data);
+            window.location.href = '/dashboard';
         } else {
+            console.error('Login failed:', response.status);
             document.getElementById('errorMessage').style.display = 'block';
         }
     } catch (error) {

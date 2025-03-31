@@ -1,12 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const movieTable = document.getElementById('movieTable').querySelector('tbody');
     const addMovieForm = document.getElementById('addMovieForm');
+    const movieTable = document.getElementById('movieTable').querySelector('tbody');
 
     // Fetch and display movies
     async function fetchMovies() {
         try {
             const response = await fetch('http://localhost:3000/movies');
             const movies = await response.json();
+
             movieTable.innerHTML = ''; // Clear table
             movies.forEach(movie => {
                 const row = document.createElement('tr');
@@ -72,11 +73,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Update movie (placeholder function)
-    window.updateMovie = (id) => {
-        alert(`Update functionality for movie ID ${id} is not implemented yet.`);
+    // Update movie
+    window.updateMovie = async (id) => {
+        const title = prompt('Enter new title:');
+        const director = prompt('Enter new director:');
+        const year = prompt('Enter new year:');
+
+        if (!title || !director || !year) {
+            alert('All fields are required!');
+            return;
+        }
+        console.log('Updating movie with ID:', id); // 检查 ID
+        console.log('Request body:', { title, director, year }); // 检查请求体
+    
+        try {
+            const response = await fetch(`http://localhost:3000/movies/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ title, director, year }),
+            });
+            console.log('Response status:', response.status); // 检查响应状态码
+            if (response.ok) {
+                alert('Movie updated successfully!');
+                fetchMovies(); // Refresh movie list
+            } else {
+                alert('Failed to update movie.');
+            }
+        } catch (error) {
+            console.error('Error updating movie:', error);
+        }
     };
 
-    // Initial fetch
+    // Initial fetch of movies
     fetchMovies();
 });

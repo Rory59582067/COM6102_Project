@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Register</h1>
+    </header>
+    <main>
+        <form id="registerForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <button type="submit">Register</button>
+        </form>
+        <div id="errorMessage" style="color: red; display: none;">Passwords do not match</div>
+        <!-- 添加返回按钮 -->
+        <button id="backToLogin" style="margin-top: 20px;">Back to Login</button>
+    </main>
+    <script src="register.js"></script>
+    <script>
+        // 为返回按钮添加点击事件
+        document.getElementById('backToLogin').addEventListener('click', () => {
+            window.location.href = 'index.html'; // 跳转到登录页面
+        });
+    </script>
+</body>
+</html>

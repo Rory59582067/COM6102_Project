@@ -19,7 +19,15 @@
             <button type="submit">Login</button>
         </form>
         <div id="errorMessage" style="color: red; display: none;">Invalid username or password</div>
+        <!-- 添加注册按钮 -->
+        <button id="registerButton">Register</button>
     </main>
     <script src="app.js"></script>
+    <script>
+        // 注册按钮点击事件
+        document.getElementById('registerButton').addEventListener('click', () => {
+            window.location.href = 'register.html'; // 跳转到注册页面
+        });
+    </script>
 </body>
 </html>

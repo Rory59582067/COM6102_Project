@@ -27,7 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error fetching movies:', error);
         }
     }
-
+    // Initial fetch of movies
+    fetchMovies();
+    
     // Add movie
     addMovieForm.addEventListener('submit', async (event) => {
         event.preventDefault();
